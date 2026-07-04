@@ -65,6 +65,17 @@ Zie [plan.md](plan.md) voor de details per fase. Eén taak ≈ één commit.
 - [ ] Uitleg per vorm (waarom het wel/niet volgt)
 - [ ] Registreren in menu + mixed + stress-test
 
+## Fase 7 — "Woord omgekeerd" (CCT-werkgeheugentaak)
+
+Aparte schermsoort (geen MCQ). Mechaniek bevestigd: doelwoord omgekeerd, met
+gaten die je invult via een A–Z-toetsenbord. Constructie = backward span.
+
+- [ ] `js/cct.js`: bron-string + omgekeerde target + gaten (30–40%)
+- [ ] Nieuw scherm: bronrij, antwoordrij met vakjes, A–Z-toetsenbord, item-timer
+- [ ] Invoer via klik én toetsenbord; Backspace wist
+- [ ] Score per letter (partial credit) + tijd, opslaan in stats (`type: cct`)
+- [ ] Eigen menu-ingang (niet in de gewone MCQ-mix)
+
 ## Fase 6 — Polish
 
 - [ ] Rotatie: glyph-familie (4–5 asymmetrische figuren)

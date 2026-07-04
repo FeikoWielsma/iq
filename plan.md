@@ -190,6 +190,46 @@ example per template.
 
 ---
 
+## Phase 7 — "Woord omgekeerd" (CCT-stijl werkgeheugentaak)
+
+**Goal:** add the letter-reversal task Sander saw in the "DemotestCCTv2"
+assessment. This is a *different interaction model* from the multiple-choice
+reasoning types — it gets its own screen, not a generator in the MCQ engine.
+
+**Confirmed mechanic:** a source letter-string (a word or random string) is
+shown; the answer row is that string **reversed**, with some positions blanked;
+the candidate fills the blanks by clicking an on-screen A–Z keyboard (or typing),
+against a per-item timer.
+
+**Research grounding (for realistic design, not required reading):** this is a
+**backward span / reverse-order recall** working-memory paradigm — the same
+construct as backward digit span, applied to letters. Backward span is
+considered a working-memory (not just short-term-memory) measure because it
+requires an *operation* (reversal) on the held information. So difficulty scales
+with string length (span), and scoring should credit partial correctness
+(per-letter), which matches the literature's partial-credit recommendation.
+
+### Design (`js/cct.js` + a new screen, new)
+
+- Generator: pick a length (start 5, scale up), generate a source string
+  (option: real Dutch words from a small bundled list, or random consonant-
+  heavy strings to avoid pronounceability advantages), compute the reverse,
+  blank ~30–40% of positions.
+- Screen: source row (all filled), answer row (boxes, some pre-filled, some
+  empty with the current cell highlighted), on-screen A–Z keyboard, item timer,
+  "Verder" button.
+- Input: clicking a letter fills the current empty cell and advances; Backspace
+  clears. Keyboard typing also works.
+- Scoring: per-letter correctness (partial credit) + time; record to Stats
+  (Phase 3) with `type: "cct"`. Difficulty = string length.
+- Distractor-free (it's recall, not MCQ), so it is **not** part of `mixed`'s
+  MCQ pool by default — give it its own menu entry, and optionally a separate
+  "werkgeheugen" toggle.
+
+**Acceptance:** reversed target computed correctly; blanked cells fillable in
+order; partial score matches hand count; timer ends the item; verified visually
+in the browser.
+
 ## Verification (every phase)
 
 1. `node test/generators.test.js` → "ALL OK".
