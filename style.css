@@ -179,7 +179,7 @@ kbd {
   font-size: 1.4rem;
   font-weight: 700;
   cursor: pointer;
-  min-height: 72px;
+  min-height: 92px;
   position: relative;
   transition: border-color .1s ease, background .1s ease;
   font-variant-numeric: tabular-nums;
@@ -193,7 +193,7 @@ kbd {
   color: var(--muted);
   font-weight: 600;
 }
-.option svg { width: 48px; height: 48px; }
+.option svg { width: 64px; height: 64px; }
 .option.correct { border-color: var(--good); background: var(--good-bg); }
 .option.wrong { border-color: var(--bad); background: var(--bad-bg); }
 .option:disabled { cursor: default; }

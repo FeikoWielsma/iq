@@ -80,13 +80,25 @@
     };
   }
 
-  function generate() {
+  function generate(difficulty) {
+    const diff = difficulty || 2;
     // altijd een stippen-regel + minstens één pijl-regel (vulling en/of richting)
     const dotsDown = Math.random() < 0.5;
     const dotStart = dotsDown ? S.pick([4, 5]) : S.pick([0, 1]);
 
-    const useFill = Math.random() < 0.75;
-    const useDir = !useFill || Math.random() < 0.5; // minstens één van beide
+    let useFill, useDir;
+    if (diff === 1) {
+      // makkelijk: stippen + precies één extra regel
+      useFill = Math.random() < 0.5;
+      useDir = !useFill;
+    } else if (diff === 3) {
+      // pittig: stippen + vulling + richting, alle drie
+      useFill = true;
+      useDir = true;
+    } else {
+      useFill = Math.random() < 0.75;
+      useDir = !useFill || Math.random() < 0.5; // minstens één van beide
+    }
     const fill0 = Math.random() < 0.5;
     const dir0 = S.pick(["left", "right"]);
 
@@ -107,8 +119,11 @@
     prompt.push({ mystery: true });
 
     const built = buildOptions(figs[4], 5);
+    const tag = ["dots", useFill ? "fill" : null, useDir ? "dir" : null].filter(Boolean).join("+");
     return {
       type: "arrows",
+      ruleTag: "arrows:" + tag,
+      difficulty: diff,
       title: "Welke figuur komt op de plaats van het vraagteken?",
       prompt,
       options: built.options,

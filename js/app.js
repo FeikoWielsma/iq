@@ -16,13 +16,15 @@
 
   // Categorieën met label; volgorde bepaalt de menuvolgorde.
   const CATEGORIES = [
-    { id: "figures", name: "Figurenreeksen", gen: () => Figures.generateSeries() },
-    { id: "arrows", name: "Pijlen & stippen", gen: () => Arrows.generate() },
-    { id: "rotation", name: "Figuren roteren", gen: () => Rotation.generate() },
-    { id: "oddone", name: "Uitzondering zoeken", gen: () => Figures.generateOddOneOut() },
-    { id: "analogy", name: "Analogieën", gen: () => Figures.generateAnalogy() },
-    { id: "numbers", name: "Getallenreeksen", gen: () => Sequences.generateNumber() },
-    { id: "letters", name: "Letterreeksen", gen: () => Sequences.generateLetter() },
+    { id: "figures", name: "Figurenreeksen", gen: (d) => Figures.generateSeries(d) },
+    { id: "staticseries", name: "Statische reeks", gen: (d) => StaticSeries.generate(d) },
+    { id: "arrows", name: "Pijlen & stippen", gen: (d) => Arrows.generate(d) },
+    { id: "counting", name: "Aantallen tellen", gen: (d) => Counting.generate(d) },
+    { id: "rotation", name: "Figuren roteren", gen: (d) => Rotation.generate(d) },
+    { id: "oddone", name: "Uitzondering zoeken", gen: (d) => Figures.generateOddOneOut(d) },
+    { id: "analogy", name: "Analogieën", gen: (d) => Figures.generateAnalogy(d) },
+    { id: "numbers", name: "Getallenreeksen", gen: (d) => Sequences.generateNumber(d) },
+    { id: "letters", name: "Letterreeksen", gen: (d) => Sequences.generateLetter(d) },
   ];
 
   const generators = {};

@@ -23,6 +23,12 @@ Zie [plan.md](plan.md) voor de details per fase. Eén taak ≈ één commit.
 - [x] Nieuwe categorie: pijlen & stippen (`js/arrows.js`)
 - [x] Samengestelde rotatie: ring + streep draaien tegengesteld, dikte wisselt
 - [x] Gemengd als standaard + per-categorie toggles (persist in localStorage)
+- [x] Cache-busting `?v=` op assets (voorkomt stale app.js)
+- [x] Antwoordfiguren groter; vormen t/m zevenhoek (8+ te lastig)
+- [x] Rotatie pittiger: 45°/90° en ring & streep verschillend groot
+- [x] Nieuwe categorie: statische reeks (`js/staticseries.js`)
+- [x] Nieuwe categorie: aantallen tellen met afleiding (`js/counting.js`)
+- [x] `ruleTag` + `difficulty` op alle generatoren (voorbereiding fase 3)
 
 ## Fase 3 — Trainingslus
 

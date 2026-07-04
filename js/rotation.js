@@ -84,6 +84,7 @@
     const dir = step > 0 ? "met de klok mee" : "tegen de klok in";
     return {
       type: "rotation",
+      ruleTag: "rotation:simple",
       title: "Welke figuur komt op de plaats van het vraagteken?",
       prompt,
       options,
@@ -140,8 +141,11 @@
   function ckey(s) { return cnorm(s.gap) + ":" + cnorm(s.stub) + ":" + (s.thick ? 1 : 0); }
 
   function generateCompound() {
-    const gapStep = S.pick([90, -90]);
-    const stubStep = -gapStep; // tegengestelde richting
+    // Pittiger: ring en streep draaien tegengesteld én mogen verschillend
+    // groot draaien (bijv. ring 90°, streep 45°).
+    const gapSign = S.pick([1, -1]);
+    const gapStep = gapSign * S.pick([45, 90, 90]); // iets vaker 90
+    const stubStep = -gapSign * S.pick([45, 90]);
     const gap0 = S.pick([0, 45, 90, 135, 180, 225, 270, 315]);
     const stub0 = S.pick([0, 45, 90, 135, 180, 225, 270, 315]);
     const thick0 = Math.random() < 0.5;
@@ -189,18 +193,25 @@
     const stubDir = stubStep > 0 ? "met de klok mee" : "tegen de klok in";
     return {
       type: "rotation",
+      ruleTag: "rotation:compound",
       title: "Welke figuur komt op de plaats van het vraagteken?",
       prompt,
       options,
       correctIndex,
       explanation:
-        "De ring (met opening) draait 90° " + ringDir + ", terwijl de streep juist " +
-        stubDir + " draait. Daarnaast wisselt de lijndikte elke stap.",
+        "De ring (met opening) draait " + Math.abs(gapStep) + "° " + ringDir +
+        ", terwijl de streep " + Math.abs(stubStep) + "° juist " + stubDir +
+        " draait. Daarnaast wisselt de lijndikte elke stap.",
     };
   }
 
-  function generate() {
-    return Math.random() < 0.5 ? generateCompound() : generateSimple();
+  function generate(difficulty) {
+    let q;
+    if (difficulty === 1) q = generateSimple();
+    else if (difficulty === 3) q = generateCompound();
+    else q = Math.random() < 0.5 ? generateCompound() : generateSimple();
+    q.difficulty = difficulty || 2;
+    return q;
   }
 
   global.Rotation = { generate, generateSimple, generateCompound };

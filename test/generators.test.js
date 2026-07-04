@@ -8,6 +8,8 @@ require(path.join(__dirname, "..", "js", "sequences.js"));
 require(path.join(__dirname, "..", "js", "rotation.js"));
 require(path.join(__dirname, "..", "js", "figures.js"));
 require(path.join(__dirname, "..", "js", "arrows.js"));
+require(path.join(__dirname, "..", "js", "staticseries.js"));
+require(path.join(__dirname, "..", "js", "counting.js"));
 
 const gens = {
   numbers: window.Sequences.generateNumber,
@@ -18,19 +20,24 @@ const gens = {
   oddone: window.Figures.generateOddOneOut,
   analogy: window.Figures.generateAnalogy,
   arrows: window.Arrows.generate,
+  staticseries: window.StaticSeries.generate,
+  counting: window.Counting.generate,
 };
 const expectedOptions = {
   numbers: 6, letters: 6, rotationSimple: 5, rotationCompound: 5,
-  figures: 5, oddone: 5, analogy: 5, arrows: 5,
+  figures: 5, oddone: 5, analogy: 5, arrows: 5, staticseries: 4, counting: 5,
 };
 
 const ITERATIONS = 3000;
 let fails = 0;
 let total = 0;
 
+const DIFFS = [undefined, 1, 2, 3];
+
 for (let i = 0; i < ITERATIONS; i++) {
   for (const [name, gen] of Object.entries(gens)) {
-    const q = gen();
+    const diff = DIFFS[i % DIFFS.length];
+    const q = gen(diff);
     total++;
     if (q.options.length !== expectedOptions[name]) {
       console.log("bad option count", name, q.options.length);
@@ -51,6 +58,12 @@ for (let i = 0; i < ITERATIONS; i++) {
     }
     if (!q.title) {
       console.log("missing title", name);
+      fails++;
+    }
+    // ruleTag ontbreekt alleen bij de losse rotatie-varianten (die krijgt de
+    // publieke generate() mee); voor de rest verwachten we hem wel.
+    if (!q.ruleTag) {
+      console.log("missing ruleTag", name);
       fails++;
     }
     // figurenreeks: de zichtbare figuren mogen niet allemaal identiek zijn

@@ -166,13 +166,26 @@
     },
   ];
 
-  function generateNumber() {
-    const rule = pick(numberRules)();
+  // Moeilijkheidspools: 1 = rekenkundig/meetkundig, 3 = lastigere regels.
+  // Indexen verwijzen naar numberRules hierboven.
+  const NUM_DIFF = {
+    1: [0, 1],
+    2: [0, 1, 2, 3, 4, 5, 6],
+    3: [2, 3, 4, 5, 6],
+  };
+
+  function generateNumber(difficulty) {
+    const pool = NUM_DIFF[difficulty] || NUM_DIFF[2];
+    const idx = pick(pool);
+    const ruleFn = numberRules[idx];
+    const rule = ruleFn();
     const prompt = rule.seq.slice(0, 5).map((v) => ({ text: String(v) }));
     prompt.push({ mystery: true });
     const built = buildNumberOptions(rule.correct, rule.candidates);
     return {
       type: "numbers",
+      ruleTag: "numbers:" + ruleFn.name,
+      difficulty: difficulty || 2,
       title: "Welk getal komt op de plaats van het vraagteken?",
       prompt,
       options: built.options,
@@ -253,13 +266,19 @@
     };
   }
 
-  function generateLetter() {
-    const rule = pick(letterRules)();
+  const LET_DIFF = { 1: [0], 2: [0, 1, 2], 3: [1, 2] };
+
+  function generateLetter(difficulty) {
+    const pool = LET_DIFF[difficulty] || LET_DIFF[2];
+    const ruleFn = letterRules[pick(pool)];
+    const rule = ruleFn();
     const prompt = rule.seq.slice(0, 5).map((n) => ({ text: toLetter(n) }));
     prompt.push({ mystery: true });
     const built = buildLetterOptions(rule.correctN);
     return {
       type: "letters",
+      ruleTag: "letters:" + ruleFn.name,
+      difficulty: difficulty || 2,
       title: "Welke letter komt op de plaats van het vraagteken?",
       prompt,
       options: built.options,

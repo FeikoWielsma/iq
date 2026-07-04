@@ -11,12 +11,11 @@
   const S = global.Sequences; // helpers: pick, randInt, shuffle
 
   const SIDES_MIN = 3;
-  const SIDES_MAX = 8;
+  const SIDES_MAX = 7; // t/m zevenhoek; 8+ hoeken zijn te lastig te tellen
   const DOTS_MAX = 6;
   const SIZES = [0.6, 0.7, 0.8, 0.9, 1.0];
   const SHAPE_NAMES = {
-    3: "driehoek", 4: "vierkant", 5: "vijfhoek",
-    6: "zeshoek", 7: "zevenhoek", 8: "achthoek",
+    3: "driehoek", 4: "vierkant", 5: "vijfhoek", 6: "zeshoek", 7: "zevenhoek",
   };
 
   /* ---------- rendering ---------- */
@@ -154,6 +153,7 @@
       };
     },
     function sidesUp() {
+      // 3→4→5→6→7: past precies binnen SIDES_MIN..SIDES_MAX (5 waarden)
       const start = S.randInt(SIDES_MIN, SIDES_MAX - 4);
       return {
         apply: (fig, i) => { fig.sides = start + i; },
@@ -189,27 +189,29 @@
   function pickRules(count) {
     const idxs = S.shuffle([0, 1, 2, 3, 4, 5]);
     const used = new Set();
-    const out = [];
+    const rules = [];
+    const attrs = [];
     for (const i of idxs) {
       if (used.has(RULE_ATTR[i])) continue;
       used.add(RULE_ATTR[i]);
-      out.push(seriesRules[i]());
-      if (out.length >= count) break;
+      rules.push(seriesRules[i]());
+      attrs.push(RULE_ATTR[i]);
+      if (rules.length >= count) break;
     }
-    return out;
+    return { rules, attrs };
   }
 
-  function generateSeries() {
-    // Minstens 2 regels tegelijk (zoals Sanders voorbeelden); af en toe 3 als
-    // pittigere variant. Eén enkele regel is te makkelijk.
-    const ruleCount = Math.random() < 0.2 ? 3 : 2;
-    const chosen = pickRules(ruleCount);
+  function generateSeries(difficulty) {
+    // moeilijkheid stuurt het aantal gelijktijdige regels: 1 = makkelijk,
+    // 2 = standaard (zoals Sanders voorbeelden), 3 = pittig.
+    const ruleCount = Math.min(3, Math.max(1, difficulty || 2));
+    const { rules, attrs } = pickRules(ruleCount);
 
     const base = randomFigure();
     const figs = [];
     for (let i = 0; i < 5; i++) {
       const f = clone(base);
-      chosen.forEach((r) => r.apply(f, i));
+      rules.forEach((r) => r.apply(f, i));
       figs.push(f);
     }
     const prompt = figs.slice(0, 4).map((f) => ({ svg: figureSVG(f) }));
@@ -218,17 +220,19 @@
     const built = buildOptions(figs[4], 5);
     return {
       type: "figures",
+      ruleTag: "figures:" + attrs.slice().sort().join("+"),
+      difficulty: difficulty || 2,
       title: "Welke figuur komt op de plaats van het vraagteken?",
       prompt,
       options: built.options,
       correctIndex: built.correctIndex,
-      explanation: "Regel: " + chosen.map((r) => r.text).join(" én ") + ".",
+      explanation: "Regel: " + rules.map((r) => r.text).join(" én ") + ".",
     };
   }
 
   /* ---------- 2. Uitzondering zoeken ---------- */
 
-  function generateOddOneOut() {
+  function generateOddOneOut(difficulty) {
     // Discriminator: één attribuut waarin 4 figuren gelijk zijn en 1 afwijkt.
     // Eén "ruis"-attribuut krijgt 5 verschillende waarden (dan is anders-zijn
     // dáárin geen kenmerk); de overige attributen zijn overal gelijk.
@@ -264,7 +268,7 @@
 
     // ruiswaarden: 5 verschillende
     let noisePool;
-    if (noise === "sides") noisePool = S.shuffle([3, 4, 5, 6, 7, 8]).slice(0, 5);
+    if (noise === "sides") noisePool = S.shuffle([3, 4, 5, 6, 7]).slice(0, 5);
     else noisePool = S.shuffle([0, 1, 2, 3, 4, 5, 6]).slice(0, 5);
 
     const oddPos = S.randInt(0, 4);
@@ -278,6 +282,8 @@
 
     return {
       type: "oddone",
+      ruleTag: "oddone:" + disc,
+      difficulty: difficulty || 2,
       title: "Welke figuur hoort er niet bij?",
       prompt: [],
       options: figs.map((f) => ({ svg: figureSVG(f) })),
@@ -292,38 +298,44 @@
 
   const transforms = [
     {
+      id: "dots+",
       can: (f) => f.dots <= DOTS_MAX - 1,
       apply: (f) => { f.dots += 1; },
       text: "er komt één stip bij",
     },
     {
+      id: "dots-",
       can: (f) => f.dots >= 1,
       apply: (f) => { f.dots -= 1; },
       text: "er gaat één stip af",
     },
     {
+      id: "sides+",
       can: (f) => f.sides <= SIDES_MAX - 1,
       apply: (f) => { f.sides += 1; },
       text: "de figuur krijgt één hoek erbij",
     },
     {
+      id: "sides-",
       can: (f) => f.sides >= SIDES_MIN + 1,
       apply: (f) => { f.sides -= 1; },
       text: "de figuur verliest één hoek",
     },
     {
+      id: "fill",
       can: () => true,
       apply: (f) => { f.fill = !f.fill; },
       text: "de vulling wisselt (wit ↔ grijs)",
     },
     {
+      id: "size",
       can: (f) => f.size >= 0.9,
       apply: (f) => { f.size = 0.6; },
       text: "de figuur wordt klein",
     },
   ];
 
-  function generateAnalogy() {
+  function generateAnalogy(difficulty) {
     const A = randomFigure();
     A.size = S.pick([0.9, 1.0]);
     const usable = transforms.filter((t) => t.can(A));
@@ -355,6 +367,8 @@
     const built = buildOptions(D, 5);
     return {
       type: "analogy",
+      ruleTag: "analogy:" + T.id,
+      difficulty: difficulty || 2,
       title: "A verandert in B. Welke figuur hoort dan bij C?",
       prompt,
       options: built.options,
