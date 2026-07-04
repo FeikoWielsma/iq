@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capaciteitentest Trainer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Capaciteitentest Trainer</h1>
+      <p class="tagline">Oefen onbeperkt op capaciteiten- en intelligentietesten</p>
+    </header>
+
+    <!-- Startscherm -->
+    <section id="menu" class="card">
+      <h2>Kies een categorie</h2>
+      <div class="category-grid">
+        <button class="cat-btn" data-cat="numbers">
+          <span class="cat-icon">123</span>
+          <span class="cat-name">Getallenreeksen</span>
+          <span class="cat-desc">Welk getal volgt?</span>
+        </button>
+        <button class="cat-btn" data-cat="letters">
+          <span class="cat-icon">AB</span>
+          <span class="cat-name">Letterreeksen</span>
+          <span class="cat-desc">Welke letter(s) volgen?</span>
+        </button>
+        <button class="cat-btn" data-cat="rotation">
+          <span class="cat-icon rot">&#10227;</span>
+          <span class="cat-name">Figuren roteren</span>
+          <span class="cat-desc">Welke figuur volgt?</span>
+        </button>
+        <button class="cat-btn" data-cat="mixed">
+          <span class="cat-icon">&#9733;</span>
+          <span class="cat-name">Gemengd</span>
+          <span class="cat-desc">Alles door elkaar</span>
+        </button>
+      </div>
+
+      <div class="options-row">
+        <label class="toggle">
+          <input type="checkbox" id="timer-toggle" checked />
+          <span>Timer per vraag</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="autoadvance-toggle" checked />
+          <span>Automatisch door na antwoord</span>
+        </label>
+      </div>
+      <p class="hint">Tip: beantwoord met de toetsen <kbd>1</kbd>–<kbd>6</kbd>.</p>
+    </section>
+
+    <!-- Quizscherm -->
+    <section id="quiz" class="card hidden">
+      <div class="quiz-top">
+        <button id="back-btn" class="ghost-btn">&#8592; Menu</button>
+        <div class="stats">
+          <span class="stat">Vraag <b id="q-count">1</b></span>
+          <span class="stat">Score <b id="q-score">0</b></span>
+          <span class="stat">Reeks <b id="q-streak">0</b></span>
+          <span class="stat timer" id="q-timer">--</span>
+        </div>
+      </div>
+
+      <div id="question-area">
+        <div id="prompt" class="prompt-row"></div>
+        <div id="options" class="options-grid"></div>
+      </div>
+
+      <div id="feedback" class="feedback hidden">
+        <div id="feedback-headline" class="feedback-headline"></div>
+        <div id="feedback-explanation" class="feedback-explanation"></div>
+        <button id="next-btn" class="primary-btn">Volgende &#8594;</button>
+      </div>
+    </section>
+
+    <footer>
+      <span id="session-summary"></span>
+    </footer>
+  </div>
+
+  <script src="js/sequences.js"></script>
+  <script src="js/rotation.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
