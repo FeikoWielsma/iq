@@ -10,6 +10,7 @@
     { id: "staticseries", name: "Statische reeks", gen: (d) => StaticSeries.generate(d) },
     { id: "arrows", name: "Pijlen & stippen", gen: (d) => Arrows.generate(d) },
     { id: "counting", name: "Aantallen tellen", gen: (d) => Counting.generate(d) },
+    { id: "movement", name: "Verplaatsing", gen: (d) => Movement.generate(d) },
     { id: "rotation", name: "Figuren roteren", gen: (d) => Rotation.generate(d) },
     { id: "oddone", name: "Uitzondering zoeken", gen: (d) => Figures.generateOddOneOut(d) },
     { id: "analogy", name: "Analogieën", gen: (d) => Figures.generateAnalogy(d) },

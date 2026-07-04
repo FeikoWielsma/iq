@@ -10,6 +10,7 @@ require(path.join(__dirname, "..", "js", "figures.js"));
 require(path.join(__dirname, "..", "js", "arrows.js"));
 require(path.join(__dirname, "..", "js", "staticseries.js"));
 require(path.join(__dirname, "..", "js", "counting.js"));
+require(path.join(__dirname, "..", "js", "movement.js"));
 
 const gens = {
   numbers: window.Sequences.generateNumber,
@@ -22,10 +23,12 @@ const gens = {
   arrows: window.Arrows.generate,
   staticseries: window.StaticSeries.generate,
   counting: window.Counting.generate,
+  movement: window.Movement.generate,
 };
 const expectedOptions = {
   numbers: 6, letters: 6, rotationSimple: 5, rotationCompound: 5,
   figures: 5, oddone: 5, analogy: 5, arrows: 5, staticseries: 4, counting: 5,
+  movement: 4,
 };
 
 const ITERATIONS = 3000;

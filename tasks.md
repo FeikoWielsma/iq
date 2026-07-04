@@ -28,6 +28,7 @@ Zie [plan.md](plan.md) voor de details per fase. Eén taak ≈ één commit.
 - [x] Rotatie pittiger: 45°/90° en ring & streep verschillend groot
 - [x] Nieuwe categorie: statische reeks (`js/staticseries.js`)
 - [x] Nieuwe categorie: aantallen tellen met afleiding (`js/counting.js`)
+- [x] Nieuwe categorie: verplaatsing van figuren (`js/movement.js`)
 - [x] `ruleTag` + `difficulty` op alle generatoren (voorbereiding fase 3)
 
 ## Fase 3 — Trainingslus (done)
