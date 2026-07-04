@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Capaciteitentest Trainer</title>
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
   <div id="app">
@@ -18,10 +18,34 @@
       <button id="start-mixed" class="primary-btn big">&#9654; Gemengd oefenen</button>
       <p class="hint centered">Aanbevolen. De aangevinkte categorie&euml;n komen willekeurig langs.</p>
 
+      <div class="difficulty-row">
+        <span class="diff-label">Niveau:</span>
+        <label class="pill"><input type="radio" name="diff" value="1" /><span>Makkelijk</span></label>
+        <label class="pill"><input type="radio" name="diff" value="2" checked /><span>Normaal</span></label>
+        <label class="pill"><input type="radio" name="diff" value="3" /><span>Moeilijk</span></label>
+        <label class="pill"><input type="radio" name="diff" value="adaptief" /><span>Adaptief</span></label>
+      </div>
+
       <h2>Categorie&euml;n</h2>
       <p class="hint">Vink aan wat je in <b>gemengd</b> wilt, of oefen los met &laquo;Oefen&raquo;.</p>
       <div class="cat-list" id="cat-list">
         <!-- rijen worden gevuld door app.js -->
+      </div>
+
+      <h2>Toetsmodus</h2>
+      <p class="hint">Een blok vragen op tijd, zonder tussentijdse feedback &mdash; net als een echt assessment.</p>
+      <div class="exam-config">
+        <label>Vragen
+          <select id="exam-count">
+            <option>10</option><option selected>20</option><option>30</option>
+          </select>
+        </label>
+        <label>Tijd (min)
+          <select id="exam-min">
+            <option>5</option><option selected>10</option><option>15</option>
+          </select>
+        </label>
+        <button id="start-exam" class="primary-btn">Start toets</button>
       </div>
 
       <div class="options-row">
@@ -35,16 +59,18 @@
         </label>
       </div>
       <p class="hint">Tip: beantwoord met de toetsen <kbd>1</kbd>–<kbd>6</kbd>.</p>
+
+      <button id="show-stats" class="ghost-btn wide">&#128202; Statistieken bekijken</button>
     </section>
 
-    <!-- Quizscherm -->
+    <!-- Quizscherm (oefenen én toets) -->
     <section id="quiz" class="card hidden">
       <div class="quiz-top">
         <button id="back-btn" class="ghost-btn">&#8592; Menu</button>
         <div class="stats">
-          <span class="stat">Vraag <b id="q-count">1</b></span>
-          <span class="stat">Score <b id="q-score">0</b></span>
-          <span class="stat">Reeks <b id="q-streak">0</b></span>
+          <span class="stat" id="stat-count">Vraag <b id="q-count">1</b></span>
+          <span class="stat practice-only">Score <b id="q-score">0</b></span>
+          <span class="stat practice-only">Reeks <b id="q-streak">0</b></span>
           <span class="stat timer" id="q-timer">--</span>
         </div>
       </div>
@@ -60,6 +86,41 @@
         <div id="feedback-explanation" class="feedback-explanation"></div>
         <button id="next-btn" class="primary-btn">Volgende &#8594;</button>
       </div>
+
+      <div id="exam-controls" class="exam-controls hidden">
+        <button id="skip-btn" class="ghost-btn">Overslaan &#8594;</button>
+        <button id="finish-btn" class="ghost-btn">Toets be&euml;indigen</button>
+      </div>
+    </section>
+
+    <!-- Toetsresultaat -->
+    <section id="results" class="card hidden">
+      <h2>Toetsresultaat</h2>
+      <div id="results-summary"></div>
+      <div id="results-breakdown"></div>
+      <h3>Nabespreking</h3>
+      <div id="results-review"></div>
+      <button id="results-back" class="primary-btn">Terug naar menu</button>
+    </section>
+
+    <!-- Statistieken -->
+    <section id="stats" class="card hidden">
+      <div class="quiz-top">
+        <button id="stats-back" class="ghost-btn">&#8592; Menu</button>
+        <h2 class="inline-h2">Statistieken</h2>
+      </div>
+      <div id="stats-summary"></div>
+      <h3>Per categorie</h3>
+      <div id="stats-bytype"></div>
+      <h3>Zwakste onderdelen</h3>
+      <div id="stats-weak"></div>
+      <div class="stats-actions">
+        <button id="stats-adaptive" class="primary-btn">Oefen je zwakke plekken</button>
+        <button id="stats-export" class="ghost-btn">Exporteren</button>
+        <button id="stats-import" class="ghost-btn">Importeren</button>
+        <button id="stats-clear" class="ghost-btn danger">Wissen</button>
+        <input type="file" id="stats-file" accept="application/json" class="hidden" />
+      </div>
     </section>
 
     <footer>
@@ -67,13 +128,13 @@
     </footer>
   </div>
 
-  <script src="js/sequences.js?v=4"></script>
-  <script src="js/rotation.js?v=4"></script>
-  <script src="js/figures.js?v=4"></script>
-  <script src="js/arrows.js?v=4"></script>
-  <script src="js/staticseries.js?v=4"></script>
-  <script src="js/counting.js?v=4"></script>
-  <script src="js/stats.js?v=4"></script>
-  <script src="js/app.js?v=4"></script>
+  <script src="js/sequences.js?v=5"></script>
+  <script src="js/rotation.js?v=5"></script>
+  <script src="js/figures.js?v=5"></script>
+  <script src="js/arrows.js?v=5"></script>
+  <script src="js/staticseries.js?v=5"></script>
+  <script src="js/counting.js?v=5"></script>
+  <script src="js/stats.js?v=5"></script>
+  <script src="js/app.js?v=5"></script>
 </body>
 </html>

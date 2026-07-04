@@ -218,8 +218,92 @@ kbd {
 
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 20px; }
 
+/* --- Moeilijkheid --- */
+.difficulty-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 4px;
+}
+.diff-label { color: var(--muted); font-size: .9rem; margin-right: 2px; }
+.pill { position: relative; cursor: pointer; }
+.pill input { position: absolute; opacity: 0; pointer-events: none; }
+.pill span {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: .9rem;
+  background: var(--card-2);
+}
+.pill input:checked + span {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+/* --- Toetsconfig --- */
+.exam-config {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 12px 0 4px;
+}
+.exam-config label { color: var(--muted); font-size: .85rem; display: flex; flex-direction: column; gap: 4px; }
+.exam-config select {
+  background: var(--card-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 1rem;
+}
+.wide { width: 100%; margin-top: 18px; }
+
+/* --- Toets-knoppen onder de vraag --- */
+.exam-controls { margin-top: 20px; display: flex; gap: 12px; justify-content: center; }
+#quiz.exam-mode .practice-only { display: none; }
+#quiz.exam-mode #feedback { display: none !important; }
+
+.inline-h2 { margin: 0; font-size: 1.3rem; }
+
+/* --- Balken (statistieken & resultaat) --- */
+.bar-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 56px;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+}
+.bar-label { color: var(--text); font-size: .9rem; }
+.bar-track { background: var(--card-2); border-radius: 999px; height: 12px; overflow: hidden; }
+.bar-fill { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+.bar-val { color: var(--muted); font-size: .85rem; text-align: right; font-variant-numeric: tabular-nums; }
+
+.big-score { font-size: 1.6rem; font-weight: 700; }
+.muted { color: var(--muted); font-size: .9rem; }
+
+.stats-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 10px; }
+.ghost-btn.danger { border-color: var(--bad); color: var(--bad); }
+
+/* --- Nabespreking --- */
+.review-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin: 10px 0;
+}
+.review-head { font-weight: 600; margin-bottom: 8px; }
+.prompt-row.small .cell { min-width: 44px; min-height: 44px; font-size: 1rem; }
+.prompt-row.small .cell svg { width: 40px; height: 40px; }
+.options-grid.small .option { min-height: 60px; padding: 8px; font-size: 1rem; }
+.options-grid.small .option svg { width: 44px; height: 44px; }
+
 @media (max-width: 520px) {
-  .category-grid { grid-template-columns: 1fr; }
   .options-grid { grid-template-columns: repeat(2, 1fr); }
   .cell { min-width: 52px; min-height: 52px; font-size: 1.3rem; }
+  .bar-row { grid-template-columns: 120px 1fr 48px; }
 }

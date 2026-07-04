@@ -21,16 +21,19 @@
   }
 
   let records = load();
+  let seq = 0;
 
   function record(rec) {
+    const ts = Date.now();
     records.push({
+      id: ts + "-" + (seq++) + "-" + Math.random().toString(36).slice(2, 7),
       type: rec.type,
       ruleTag: rec.ruleTag || rec.type,
       correct: !!rec.correct,
       timeMs: rec.timeMs || 0,
       difficulty: rec.difficulty || 2,
       exam: !!rec.exam,
-      ts: Date.now(),
+      ts: ts,
     });
     if (records.length > MAX) records = records.slice(-MAX);
     save(records);
@@ -92,18 +95,19 @@
     return JSON.stringify(records, null, 2);
   }
 
-  // voegt geïmporteerde records samen, ontdubbelt op ts; retourneert aantal toegevoegd
+  // voegt geïmporteerde records samen, ontdubbelt op id (val terug op ts);
+  // retourneert aantal toegevoegd
   function importJSON(str) {
     let incoming;
     try { incoming = JSON.parse(str); } catch (e) { throw new Error("Ongeldig JSON-bestand."); }
     if (!Array.isArray(incoming)) throw new Error("Verwacht een lijst met records.");
-    const have = new Set(records.map((r) => r.ts));
+    const key = (r) => r.id || "ts:" + r.ts;
+    const have = new Set(records.map(key));
     let added = 0;
     for (const r of incoming) {
-      if (r && typeof r === "object" && !have.has(r.ts)) {
-        records.push(r);
-        have.add(r.ts);
-        added++;
+      if (r && typeof r === "object") {
+        const k = key(r);
+        if (!have.has(k)) { records.push(r); have.add(k); added++; }
       }
     }
     records.sort((a, b) => (a.ts || 0) - (b.ts || 0));

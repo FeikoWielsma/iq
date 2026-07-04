@@ -30,26 +30,26 @@ Zie [plan.md](plan.md) voor de details per fase. Eén taak ≈ één commit.
 - [x] Nieuwe categorie: aantallen tellen met afleiding (`js/counting.js`)
 - [x] `ruleTag` + `difficulty` op alle generatoren (voorbereiding fase 3)
 
-## Fase 3 — Trainingslus
+## Fase 3 — Trainingslus (done)
 
-- [ ] `js/stats.js`: record/aggregate in localStorage (`iq-trainer-stats-v1`)
-- [ ] `ruleTag` toevoegen aan alle bestaande generatoren
-- [ ] `difficulty`-parameter (1–3) in alle generatoren
-- [ ] Moeilijkheidskeuze in het menu (persist in localStorage)
-- [ ] Adaptieve modus: inverse-accuracy sampling van categorie + ruleTag
-- [ ] Statistiekenscherm: accuracy per categorie, 5 zwakste regels
-- [ ] "Oefen je zwakke plekken"-knop
-- [ ] Export/import van stats als JSON-bestand
-- [ ] Stress-test uitbreiden: ruleTag + difficulty aanwezig op elke vraag
+- [x] `js/stats.js`: record/aggregate in localStorage (`iq-trainer-stats-v1`)
+- [x] `ruleTag` toevoegen aan alle bestaande generatoren
+- [x] `difficulty`-parameter (1–3) in alle generatoren
+- [x] Moeilijkheidskeuze in het menu (persist in localStorage)
+- [x] Adaptieve modus: inverse-accuracy sampling van categorie + difficulty
+- [x] Statistiekenscherm: accuracy per categorie, 5 zwakste regels
+- [x] "Oefen je zwakke plekken"-knop
+- [x] Export/import van stats als JSON-bestand
+- [x] `test/stats.test.js` + stress-test met ruleTag/difficulty
 
-## Fase 4 — Toetsmodus
+## Fase 4 — Toetsmodus (done)
 
-- [ ] `js/exam.js`: configscherm (aantal vragen, tijd, categorieën)
-- [ ] Examenflow: blok-timer, geen feedback, overslaan-knop
-- [ ] Resultaatscherm: score + uitsplitsing per categorie
-- [ ] Review van fouten/overgeslagen vragen met uitleg
-- [ ] Exam-records (`exam: true`) in stats
-- [ ] "Toetsmodus"-knop in het menu
+- [x] Configuratie in menu (aantal vragen, tijd)
+- [x] Examenflow: blok-timer, geen feedback, overslaan/beëindigen
+- [x] Resultaatscherm: score + uitsplitsing per categorie
+- [x] Review van fouten/overgeslagen vragen met uitleg
+- [x] Exam-records (`exam: true`) in stats
+- [x] "Toetsmodus" in het menu
 
 ## Fase 5 — Nieuwe categorieën
 
