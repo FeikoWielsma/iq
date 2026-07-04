@@ -15,6 +15,9 @@
   const timerEl = $("q-timer");
 
   const generators = {
+    figures: () => Figures.generateSeries(),
+    oddone: () => Figures.generateOddOneOut(),
+    analogy: () => Figures.generateAnalogy(),
     numbers: () => Sequences.generateNumber(),
     letters: () => Sequences.generateLetter(),
     rotation: () => Rotation.generate(),
@@ -107,14 +110,21 @@
     $("q-score").textContent = String(state.score);
     $("q-streak").textContent = String(state.streak);
 
-    // prompt
+    // titel + prompt
+    $("q-title").textContent = q.title || "";
     promptEl.innerHTML = "";
+    promptEl.classList.toggle("hidden", q.prompt.length === 0);
     q.prompt.forEach((cell) => {
       const div = document.createElement("div");
-      div.className = "cell" + (cell.mystery ? " mystery" : "");
-      if (cell.mystery) div.textContent = "?";
-      else if (cell.svg) div.innerHTML = cell.svg;
-      else div.textContent = cell.text;
+      if (cell.sep) {
+        div.className = "cell sep";
+        div.textContent = cell.sep;
+      } else {
+        div.className = "cell" + (cell.mystery ? " mystery" : "");
+        if (cell.mystery) div.textContent = "?";
+        else if (cell.svg) div.innerHTML = cell.svg;
+        else div.textContent = cell.text;
+      }
       promptEl.appendChild(div);
     });
 

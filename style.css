@@ -142,6 +142,24 @@ kbd {
 }
 .cell.mystery { background: var(--card-2); color: var(--accent); border-color: var(--accent); }
 .cell svg { width: 52px; height: 52px; display: block; }
+.cell.sep {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: auto;
+  min-height: auto;
+  padding: 0 2px;
+  align-self: center;
+}
+
+.q-title {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-size: .95rem;
+}
 
 /* Options */
 .options-grid {
