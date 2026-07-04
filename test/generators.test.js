@@ -7,16 +7,22 @@ global.window = global;
 require(path.join(__dirname, "..", "js", "sequences.js"));
 require(path.join(__dirname, "..", "js", "rotation.js"));
 require(path.join(__dirname, "..", "js", "figures.js"));
+require(path.join(__dirname, "..", "js", "arrows.js"));
 
 const gens = {
   numbers: window.Sequences.generateNumber,
   letters: window.Sequences.generateLetter,
-  rotation: window.Rotation.generate,
+  rotationSimple: window.Rotation.generateSimple,
+  rotationCompound: window.Rotation.generateCompound,
   figures: window.Figures.generateSeries,
   oddone: window.Figures.generateOddOneOut,
   analogy: window.Figures.generateAnalogy,
+  arrows: window.Arrows.generate,
 };
-const expectedOptions = { numbers: 6, letters: 6, rotation: 5, figures: 5, oddone: 5, analogy: 5 };
+const expectedOptions = {
+  numbers: 6, letters: 6, rotationSimple: 5, rotationCompound: 5,
+  figures: 5, oddone: 5, analogy: 5, arrows: 5,
+};
 
 const ITERATIONS = 3000;
 let fails = 0;

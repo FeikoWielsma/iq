@@ -15,6 +15,15 @@ Zie [plan.md](plan.md) voor de details per fase. Eén taak ≈ één commit.
 - [x] Figuur-analogieën (A:B :: C:?)
 - [x] Categorieën in menu + mixed
 
+## Live feedback (done)
+
+- [x] Grijze vulling duidelijk zichtbaar (#8e96a4 i.p.v. bijna-wit)
+- [x] Figurenreeks standaard 2 gelijktijdige regels (soms 3)
+- [x] Stippen binnen ingeschreven cirkel → geen overlap in driehoeken
+- [x] Nieuwe categorie: pijlen & stippen (`js/arrows.js`)
+- [x] Samengestelde rotatie: ring + streep draaien tegengesteld, dikte wisselt
+- [x] Gemengd als standaard + per-categorie toggles (persist in localStorage)
+
 ## Fase 3 — Trainingslus
 
 - [ ] `js/stats.js`: record/aggregate in localStorage (`iq-trainer-stats-v1`)

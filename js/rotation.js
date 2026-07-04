@@ -33,7 +33,7 @@
     return (o.mirrored ? "m" : "r") + norm(o.angle);
   }
 
-  function generate() {
+  function generateSimple() {
     const step = S.pick([45, 90, -45, -90]);
     const base = S.pick([0, 45, 90, 135, 180, 225, 270, 315]);
 
@@ -97,5 +97,111 @@
     };
   }
 
-  global.Rotation = { generate };
+  /* ---------- Samengestelde rotatie ----------
+     Twee onafhankelijke onderdelen die tegengesteld draaien:
+     - een ring met een opening (binnenste deel)
+     - een streep die uit de ring steekt (buitenste deel)
+     Daarbij wisselt de lijndikte elke stap. */
+
+  const CX = 32, CY = 32, RR = 12, STUB = 9;
+
+  function ringWithGap(gapCenterDeg, gapSizeDeg, sw) {
+    const pts = [];
+    for (let a = gapSizeDeg / 2; a <= 360 - gapSizeDeg / 2 + 0.01; a += 6) {
+      const ang = ((gapCenterDeg + a) * Math.PI) / 180;
+      pts.push((CX + RR * Math.cos(ang)).toFixed(1) + "," + (CY + RR * Math.sin(ang)).toFixed(1));
+    }
+    return '<polyline points="' + pts.join(" ") + '" fill="none" stroke="#111" stroke-width="' +
+      sw + '" stroke-linecap="round"/>';
+  }
+
+  function stub(angleDeg, sw) {
+    const a = (angleDeg * Math.PI) / 180;
+    const x1 = CX + RR * Math.cos(a), y1 = CY + RR * Math.sin(a);
+    const x2 = CX + (RR + STUB) * Math.cos(a), y2 = CY + (RR + STUB) * Math.sin(a);
+    return '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) +
+      '" y2="' + y2.toFixed(1) + '" stroke="#111" stroke-width="' + sw + '" stroke-linecap="round"/>';
+  }
+
+  const THIN = 2.4, THICK = 4.4;
+
+  function compoundSVG(st) {
+    const sw = st.thick ? THICK : THIN;
+    return (
+      '<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect x="2" y="2" width="60" height="60" rx="8" fill="#fff" stroke="#111" stroke-width="2"/>' +
+      ringWithGap(st.gap, 70, sw) +
+      stub(st.stub, sw) +
+      "</svg>"
+    );
+  }
+
+  function cnorm(a) { return ((Math.round(a / 5) * 5 % 360) + 360) % 360; }
+  function ckey(s) { return cnorm(s.gap) + ":" + cnorm(s.stub) + ":" + (s.thick ? 1 : 0); }
+
+  function generateCompound() {
+    const gapStep = S.pick([90, -90]);
+    const stubStep = -gapStep; // tegengestelde richting
+    const gap0 = S.pick([0, 45, 90, 135, 180, 225, 270, 315]);
+    const stub0 = S.pick([0, 45, 90, 135, 180, 225, 270, 315]);
+    const thick0 = Math.random() < 0.5;
+
+    const frame = (i) => ({
+      gap: gap0 + i * gapStep,
+      stub: stub0 + i * stubStep,
+      thick: (i % 2 === 0) === thick0,
+    });
+
+    const prompt = [];
+    for (let i = 0; i < 4; i++) prompt.push({ svg: compoundSVG(frame(i)) });
+    prompt.push({ mystery: true });
+
+    const correct = frame(4);
+    const f3 = frame(3);
+    const candidates = [
+      { gap: correct.gap - 2 * gapStep, stub: correct.stub, thick: correct.thick }, // ring verkeerde kant
+      { gap: correct.gap, stub: correct.stub - 2 * stubStep, thick: correct.thick }, // streep verkeerde kant
+      { gap: correct.gap, stub: correct.stub, thick: !correct.thick },               // verkeerde dikte
+      { gap: f3.gap, stub: f3.stub, thick: f3.thick },                               // niet verder gedraaid
+      { gap: correct.gap + gapStep, stub: correct.stub + stubStep, thick: correct.thick }, // te ver
+    ];
+
+    const seen = new Set([ckey(correct)]);
+    const wrongs = [];
+    for (const c of candidates) {
+      const k = ckey(c);
+      if (!seen.has(k)) { seen.add(k); wrongs.push(c); }
+      if (wrongs.length >= 4) break;
+    }
+    let extra = 30;
+    while (wrongs.length < 4) {
+      const c = { gap: correct.gap + extra, stub: correct.stub, thick: correct.thick };
+      const k = ckey(c);
+      if (!seen.has(k)) { seen.add(k); wrongs.push(c); }
+      extra += 45;
+    }
+
+    const all = S.shuffle(wrongs.concat([correct]));
+    const options = all.map((s) => ({ svg: compoundSVG(s) }));
+    const correctIndex = all.findIndex((s) => ckey(s) === ckey(correct));
+
+    const ringDir = gapStep > 0 ? "met de klok mee" : "tegen de klok in";
+    const stubDir = stubStep > 0 ? "met de klok mee" : "tegen de klok in";
+    return {
+      type: "rotation",
+      title: "Welke figuur komt op de plaats van het vraagteken?",
+      prompt,
+      options,
+      correctIndex,
+      explanation:
+        "De ring (met opening) draait 90° " + ringDir + ", terwijl de streep juist " +
+        stubDir + " draait. Daarnaast wisselt de lijndikte elke stap.",
+    };
+  }
+
+  function generate() {
+    return Math.random() < 0.5 ? generateCompound() : generateSimple();
+  }
+
+  global.Rotation = { generate, generateSimple, generateCompound };
 })(window);

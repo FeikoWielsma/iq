@@ -15,43 +15,13 @@
 
     <!-- Startscherm -->
     <section id="menu" class="card">
-      <h2>Kies een categorie</h2>
-      <div class="category-grid">
-        <button class="cat-btn" data-cat="figures">
-          <span class="cat-icon">&#9651;&#9679;</span>
-          <span class="cat-name">Figurenreeksen</span>
-          <span class="cat-desc">Welke figuur volgt?</span>
-        </button>
-        <button class="cat-btn" data-cat="oddone">
-          <span class="cat-icon">&#9647;&#9648;</span>
-          <span class="cat-name">Uitzondering zoeken</span>
-          <span class="cat-desc">Welke hoort er niet bij?</span>
-        </button>
-        <button class="cat-btn" data-cat="analogy">
-          <span class="cat-icon">A:B</span>
-          <span class="cat-name">Analogie&euml;n</span>
-          <span class="cat-desc">A staat tot B zoals C tot&hellip;</span>
-        </button>
-        <button class="cat-btn" data-cat="numbers">
-          <span class="cat-icon">123</span>
-          <span class="cat-name">Getallenreeksen</span>
-          <span class="cat-desc">Welk getal volgt?</span>
-        </button>
-        <button class="cat-btn" data-cat="letters">
-          <span class="cat-icon">AB</span>
-          <span class="cat-name">Letterreeksen</span>
-          <span class="cat-desc">Welke letter(s) volgen?</span>
-        </button>
-        <button class="cat-btn" data-cat="rotation">
-          <span class="cat-icon rot">&#10227;</span>
-          <span class="cat-name">Figuren roteren</span>
-          <span class="cat-desc">Welke figuur volgt?</span>
-        </button>
-        <button class="cat-btn" data-cat="mixed">
-          <span class="cat-icon">&#9733;</span>
-          <span class="cat-name">Gemengd</span>
-          <span class="cat-desc">Alles door elkaar</span>
-        </button>
+      <button id="start-mixed" class="primary-btn big">&#9654; Gemengd oefenen</button>
+      <p class="hint centered">Aanbevolen. De aangevinkte categorie&euml;n komen willekeurig langs.</p>
+
+      <h2>Categorie&euml;n</h2>
+      <p class="hint">Vink aan wat je in <b>gemengd</b> wilt, of oefen los met &laquo;Oefen&raquo;.</p>
+      <div class="cat-list" id="cat-list">
+        <!-- rijen worden gevuld door app.js -->
       </div>
 
       <div class="options-row">
@@ -100,6 +70,7 @@
   <script src="js/sequences.js"></script>
   <script src="js/rotation.js"></script>
   <script src="js/figures.js"></script>
+  <script src="js/arrows.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

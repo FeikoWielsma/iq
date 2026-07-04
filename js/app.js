@@ -14,17 +14,37 @@
   const feedbackExplanation = $("feedback-explanation");
   const timerEl = $("q-timer");
 
-  const generators = {
-    figures: () => Figures.generateSeries(),
-    oddone: () => Figures.generateOddOneOut(),
-    analogy: () => Figures.generateAnalogy(),
-    numbers: () => Sequences.generateNumber(),
-    letters: () => Sequences.generateLetter(),
-    rotation: () => Rotation.generate(),
-  };
+  // Categorieën met label; volgorde bepaalt de menuvolgorde.
+  const CATEGORIES = [
+    { id: "figures", name: "Figurenreeksen", gen: () => Figures.generateSeries() },
+    { id: "arrows", name: "Pijlen & stippen", gen: () => Arrows.generate() },
+    { id: "rotation", name: "Figuren roteren", gen: () => Rotation.generate() },
+    { id: "oddone", name: "Uitzondering zoeken", gen: () => Figures.generateOddOneOut() },
+    { id: "analogy", name: "Analogieën", gen: () => Figures.generateAnalogy() },
+    { id: "numbers", name: "Getallenreeksen", gen: () => Sequences.generateNumber() },
+    { id: "letters", name: "Letterreeksen", gen: () => Sequences.generateLetter() },
+  ];
+
+  const generators = {};
+  CATEGORIES.forEach((c) => { generators[c.id] = c.gen; });
+
+  const MIX_KEY = "iq-mixed-cats-v1";
+  function loadEnabled() {
+    try {
+      const raw = localStorage.getItem(MIX_KEY);
+      if (raw) return new Set(JSON.parse(raw));
+    } catch (e) { /* localStorage kan geblokkeerd zijn */ }
+    return new Set(CATEGORIES.map((c) => c.id)); // standaard: alles aan
+  }
+  function saveEnabled(set) {
+    try { localStorage.setItem(MIX_KEY, JSON.stringify([...set])); } catch (e) { /* ignore */ }
+  }
+  const enabled = loadEnabled();
+
   generators.mixed = () => {
-    const keys = Object.keys(generators).filter((k) => k !== "mixed");
-    return generators[keys[Math.floor(Math.random() * keys.length)]]();
+    const active = CATEGORIES.map((c) => c.id).filter((id) => enabled.has(id));
+    const pool = active.length ? active : CATEGORIES.map((c) => c.id);
+    return generators[pool[Math.floor(Math.random() * pool.length)]]();
   };
 
   const state = {
@@ -209,10 +229,43 @@
     $("q-streak").textContent = String(state.streak);
   }
 
+  /* --- menu opbouwen --- */
+  function buildCategoryList() {
+    const list = $("cat-list");
+    list.innerHTML = "";
+    CATEGORIES.forEach((c) => {
+      const row = document.createElement("div");
+      row.className = "cat-row";
+
+      const label = document.createElement("label");
+      label.className = "toggle cat-include";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = enabled.has(c.id);
+      cb.addEventListener("change", () => {
+        if (cb.checked) enabled.add(c.id);
+        else enabled.delete(c.id);
+        saveEnabled(enabled);
+      });
+      const span = document.createElement("span");
+      span.textContent = c.name;
+      label.appendChild(cb);
+      label.appendChild(span);
+
+      const btn = document.createElement("button");
+      btn.className = "ghost-btn oefen-btn";
+      btn.textContent = "Oefen";
+      btn.addEventListener("click", () => startCategory(c.id));
+
+      row.appendChild(label);
+      row.appendChild(btn);
+      list.appendChild(row);
+    });
+  }
+
   /* --- events --- */
-  document.querySelectorAll(".cat-btn").forEach((btn) => {
-    btn.addEventListener("click", () => startCategory(btn.dataset.cat));
-  });
+  buildCategoryList();
+  $("start-mixed").addEventListener("click", () => startCategory("mixed"));
   $("back-btn").addEventListener("click", backToMenu);
   $("next-btn").addEventListener("click", nextQuestion);
 

@@ -44,36 +44,35 @@ header h1 { margin: 0; font-size: 1.8rem; }
 .hidden { display: none !important; }
 
 /* --- Menu --- */
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin: 16px 0;
+.primary-btn.big {
+  display: block;
+  width: 100%;
+  font-size: 1.15rem;
+  padding: 16px;
+  margin-bottom: 6px;
 }
-.cat-btn {
+.hint.centered { text-align: center; }
+
+#menu h2 { margin: 20px 0 4px; font-size: 1.1rem; }
+
+.cat-list {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+.cat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   background: var(--card-2);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  color: var(--text);
-  cursor: pointer;
-  text-align: left;
-  transition: transform .08s ease, border-color .12s ease;
+  border-radius: 10px;
+  padding: 10px 14px;
 }
-.cat-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
-.cat-icon {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-.cat-icon.rot { font-size: 1.8rem; line-height: 1; }
-.cat-name { font-weight: 600; }
-.cat-desc { color: var(--muted); font-size: .85rem; }
+.cat-include { flex: 1; color: var(--text); }
+.oefen-btn { flex-shrink: 0; }
 
 .options-row {
   display: flex;

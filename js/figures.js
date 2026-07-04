@@ -21,15 +21,16 @@
 
   /* ---------- rendering ---------- */
 
-  // Dobbelsteen-achtige stipposities binnen een 24x24 vak rond het middelpunt.
+  // Genormaliseerde stipposities (−1..1), geschaald naar de ingeschreven cirkel
+  // van de veelhoek. Max radiale afstand ~0.75 zodat stippen ruim binnen blijven.
   const DOT_LAYOUTS = [
     [],
     [[0, 0]],
-    [[-6, -6], [6, 6]],
-    [[-7, -7], [0, 0], [7, 7]],
-    [[-7, -7], [7, -7], [-7, 7], [7, 7]],
-    [[-8, -8], [8, -8], [0, 0], [-8, 8], [8, 8]],
-    [[-7, -8], [7, -8], [-7, 0], [7, 0], [-7, 8], [7, 8]],
+    [[-0.5, 0], [0.5, 0]],
+    [[-0.55, 0.5], [0, -0.55], [0.55, 0.5]],
+    [[-0.5, -0.5], [0.5, -0.5], [-0.5, 0.5], [0.5, 0.5]],
+    [[-0.5, -0.5], [0.5, -0.5], [0, 0], [-0.5, 0.5], [0.5, 0.5]],
+    [[-0.5, -0.55], [0.5, -0.55], [-0.5, 0], [0.5, 0], [-0.5, 0.55], [0.5, 0.55]],
   ];
 
   function polygonPoints(sides, cx, cy, r) {
@@ -46,14 +47,17 @@
   function figureSVG(fig) {
     const cx = 32, cy = 32;
     const r = 26 * fig.size;
-    const shapeFill = fig.fill ? "#d0d3d9" : "#fff";
-    // driehoeken hebben onderin meer ruimte: stippen iets omlaag en compacter
-    const dotCy = fig.sides === 3 ? cy + 5 : cy;
-    const dotScale = (fig.sides === 3 ? 0.62 : 0.85) * fig.size;
+    // duidelijk zichtbaar grijs vs wit; zwarte stippen/rand blijven leesbaar
+    const shapeFill = fig.fill ? "#8e96a4" : "#fff";
+    // Stippen binnen de ingeschreven cirkel (straal = r·cos(π/n), gecentreerd op
+    // het middelpunt). Zo passen ze altijd netjes — driehoeken krijgen vanzelf
+    // een kleiner veld en er is geen overlap met de randen meer.
+    const inR = r * Math.cos(Math.PI / fig.sides);
+    const dotR = Math.min(3.2, Math.max(1.7, inR * 0.17));
     const dots = DOT_LAYOUTS[fig.dots]
-      .map(([dx, dy]) =>
-        '<circle cx="' + (cx + dx * dotScale) + '" cy="' + (dotCy + dy * dotScale) +
-        '" r="' + Math.max(2.4, 3 * fig.size) + '" fill="#111"/>')
+      .map(([nx, ny]) =>
+        '<circle cx="' + (cx + nx * inR).toFixed(2) + '" cy="' + (cy + ny * inR).toFixed(2) +
+        '" r="' + dotR.toFixed(2) + '" fill="#111"/>')
       .join("");
     return (
       '<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg">' +
@@ -196,8 +200,9 @@
   }
 
   function generateSeries() {
-    // moeilijkheid: 1 of 2 regels tegelijk (2 regels ≈ Sanders voorbeelden)
-    const ruleCount = Math.random() < 0.55 ? 2 : 1;
+    // Minstens 2 regels tegelijk (zoals Sanders voorbeelden); af en toe 3 als
+    // pittigere variant. Eén enkele regel is te makkelijk.
+    const ruleCount = Math.random() < 0.2 ? 3 : 2;
     const chosen = pickRules(ruleCount);
 
     const base = randomFigure();
