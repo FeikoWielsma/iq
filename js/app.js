@@ -14,6 +14,8 @@
     { id: "rotation", name: "Figuren roteren", gen: (d) => Rotation.generate(d) },
     { id: "oddone", name: "Uitzondering zoeken", gen: (d) => Figures.generateOddOneOut(d) },
     { id: "analogy", name: "Analogieën", gen: (d) => Figures.generateAnalogy(d) },
+    { id: "cube", name: "Kubus vouwen", gen: (d) => Cube.generate(d) },
+    { id: "syllogism", name: "Syllogismen", gen: (d) => Syllogism.generate(d) },
     { id: "numbers", name: "Getallenreeksen", gen: (d) => Sequences.generateNumber(d) },
     { id: "letters", name: "Letterreeksen", gen: (d) => Sequences.generateLetter(d) },
   ];
@@ -38,7 +40,7 @@
   let difficultyMode = lsGet(DIFF_KEY) || "2"; // "1" | "2" | "3" | "adaptief"
 
   /* ---------- schermbeheer ---------- */
-  const SECTIONS = ["menu", "quiz", "results", "stats"];
+  const SECTIONS = ["menu", "quiz", "results", "stats", "cct"];
   function show(id) { SECTIONS.forEach((s) => $(s).classList.toggle("hidden", s !== id)); }
 
   /* ---------- vraagkeuze + moeilijkheid ---------- */
@@ -94,8 +96,9 @@
     q.prompt.forEach((cell) => {
       const div = document.createElement("div");
       if (cell.sep) { div.className = "cell sep"; div.textContent = cell.sep; }
+      else if (cell.plain) { div.className = "premise"; div.textContent = cell.text; }
       else {
-        div.className = "cell" + (cell.mystery ? " mystery" : "");
+        div.className = "cell" + (cell.mystery ? " mystery" : "") + (cell.wide ? " wide" : "");
         if (cell.mystery) div.textContent = "?";
         else if (cell.svg) div.innerHTML = cell.svg;
         else div.textContent = cell.text;
@@ -107,6 +110,7 @@
   function renderOptions(el, q, opts) {
     // opts: { interactive, chosen, onClick }
     el.innerHTML = "";
+    el.classList.toggle("text-options", q.optionLayout === "text");
     q.options.forEach((opt, i) => {
       const btn = document.createElement("button");
       btn.className = "option";
@@ -486,6 +490,9 @@
 
   $("start-mixed").addEventListener("click", () => startPractice("mixed"));
   $("start-exam").addEventListener("click", startExam);
+  $("start-cct").addEventListener("click", () => { show("cct"); CCT.start(); });
+  $("cct-back").addEventListener("click", () => { CCT.stop(); show("menu"); });
+  CCT.wire();
   $("back-btn").addEventListener("click", backToMenu);
   $("next-btn").addEventListener("click", nextPractice);
   $("skip-btn").addEventListener("click", gotoNextExam);

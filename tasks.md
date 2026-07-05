@@ -52,42 +52,37 @@ Zie [plan.md](plan.md) voor de details per fase. Eén taak ≈ één commit.
 - [x] Exam-records (`exam: true`) in stats
 - [x] "Toetsmodus" in het menu
 
-## Fase 5 — Nieuwe categorieën
+## Fase 5 — Nieuwe categorieën (done)
 
 ### Kubus vouwen (`js/cube.js`)
 
-- [ ] Face-model: vaste kruis-uitslag + adjacency/opposites hardcoded
-- [ ] 24 geldige kubus-oriëntaties enumereren uit het model
-- [ ] Net-rendering (SVG kruis met 6 symbolen)
-- [ ] Isometrische kubus-rendering (3 zichtbare vlakken)
-- [ ] Afleiders: opposite-faces-samen, verkeerde chiraliteit, verwisseld symbool
-- [ ] Validiteitstest in `test/generators.test.js`
-- [ ] Registreren in menu + mixed
+- [x] Vlakmodel via normalen + handedness (echte kubus-hoeken)
+- [x] Net-rendering (SVG kruis met 6 symbolen)
+- [x] Isometrische kubus-rendering (3 zichtbare vlakken)
+- [x] Afleiders: tegenoverliggend vlak, gespiegelde hoek, dubbel symbool
+- [x] Correctheidstest: precies één vouwbare optie (20k, altijd de juiste)
+- [x] Registreren in menu + mixed
 
 ### Syllogismen (`js/syllogism.js`)
 
-- [ ] Nonsens-zelfstandige naamwoorden + premisse-templates (geldig: Barbara,
-      Celarent, Darii, Ferio; ongeldig: undistributed middle, illicit conversion)
-- [ ] Vraaggeneratie met "Geen van deze conclusies volgt logisch."-optie
-- [ ] Uitleg per vorm (waarom het wel/niet volgt)
-- [ ] Registreren in menu + mixed + stress-test
+- [x] Onzin-naamwoorden + vormen (geldig: Barbara/Celarent/Darii/Ferio;
+      ongeldig: onverdeelde middenterm, twee particuliere/ontkennende premissen)
+- [x] "Geen van deze conclusies volgt logisch."-optie
+- [x] Uitleg per vorm; registreren in menu + mixed + stress-test
 
-## Fase 7 — "Woord omgekeerd" (CCT-werkgeheugentaak)
+## Fase 7 — "Woord omgekeerd" (CCT-werkgeheugentaak) (done)
 
-Aparte schermsoort (geen MCQ). Mechaniek bevestigd: doelwoord omgekeerd, met
-gaten die je invult via een A–Z-toetsenbord. Constructie = backward span.
+- [x] `js/cct.js`: bron-string + omgekeerde target + gaten (~40%)
+- [x] Eigen scherm: bronrij, antwoordrij, A–Z-toetsenbord, item-timer
+- [x] Invoer via klik én toetsenbord; Backspace wist
+- [x] Score per item + opslaan in stats (`type: cct`)
+- [x] Eigen menu-ingang (niet in de gewone MCQ-mix)
 
-- [ ] `js/cct.js`: bron-string + omgekeerde target + gaten (30–40%)
-- [ ] Nieuw scherm: bronrij, antwoordrij met vakjes, A–Z-toetsenbord, item-timer
-- [ ] Invoer via klik én toetsenbord; Backspace wist
-- [ ] Score per letter (partial credit) + tijd, opslaan in stats (`type: cct`)
-- [ ] Eigen menu-ingang (niet in de gewone MCQ-mix)
+## Fase 6 — Polish (grotendeels done)
 
-## Fase 6 — Polish
-
-- [ ] Rotatie: glyph-familie (4–5 asymmetrische figuren)
-- [ ] Rotatie difficulty 3: roteren + spiegelen gecombineerd
-- [ ] Visuele uitleg bij figuurvragen (veranderend attribuut uitgelicht)
-- [ ] Letterreeks-afleiders op basis van foute regels i.p.v. ±offset
-- [ ] Mobile pass op 360px breedte
-- [ ] Favicon + README.md met screenshot
+- [x] Rotatie: glyph-familie (3 asymmetrische figuren)
+- [x] Rotatie difficulty 3: samengestelde rotatie (ring + streep)
+- [x] Letterreeks-afleiders op basis van foute regels i.p.v. ±offset
+- [x] Responsive CSS (menu, opties, toetsenbord) tot smalle schermen
+- [x] Favicon (inline SVG) + README.md
+- [ ] Visuele uitleg bij figuurvragen (veranderend attribuut uitgelicht) — open

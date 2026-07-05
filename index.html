@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Capaciteitentest Trainer</title>
-  <link rel="stylesheet" href="style.css?v=6" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%235865f2'/%3E%3Ctext x='32' y='45' font-size='32' font-family='Segoe UI,sans-serif' font-weight='bold' text-anchor='middle' fill='white'%3EIQ%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css?v=7" />
 </head>
 <body>
   <div id="app">
@@ -60,7 +61,10 @@
       </div>
       <p class="hint">Tip: beantwoord met de toetsen <kbd>1</kbd>–<kbd>6</kbd>.</p>
 
-      <button id="show-stats" class="ghost-btn wide">&#128202; Statistieken bekijken</button>
+      <div class="menu-buttons">
+        <button id="start-cct" class="ghost-btn">&#9998; Woord omgekeerd (werkgeheugen)</button>
+        <button id="show-stats" class="ghost-btn">&#128202; Statistieken bekijken</button>
+      </div>
     </section>
 
     <!-- Quizscherm (oefenen én toets) -->
@@ -123,19 +127,43 @@
       </div>
     </section>
 
+    <!-- Woord omgekeerd (CCT-werkgeheugentaak) -->
+    <section id="cct" class="card hidden">
+      <div class="quiz-top">
+        <button id="cct-back" class="ghost-btn">&#8592; Menu</button>
+        <div class="stats">
+          <span class="stat">Item <b id="cct-count">1</b></span>
+          <span class="stat">Goed <b id="cct-score">0</b></span>
+          <span class="stat timer" id="cct-timer">--</span>
+        </div>
+      </div>
+      <p class="q-title">Bekijk het woord en vul het <b>omgekeerde</b> woord aan (typ of klik).</p>
+      <div class="cct-row" id="cct-source"></div>
+      <div class="cct-arrow">&#8595; omgekeerd</div>
+      <div class="cct-row" id="cct-answer"></div>
+      <div id="cct-keyboard" class="cct-keyboard"></div>
+      <div id="cct-feedback" class="feedback hidden">
+        <div id="cct-headline" class="feedback-headline"></div>
+        <button id="cct-next" class="primary-btn">Volgende &#8594;</button>
+      </div>
+    </section>
+
     <footer>
       <span id="session-summary"></span>
     </footer>
   </div>
 
-  <script src="js/sequences.js?v=6"></script>
-  <script src="js/rotation.js?v=6"></script>
-  <script src="js/figures.js?v=6"></script>
-  <script src="js/arrows.js?v=6"></script>
-  <script src="js/staticseries.js?v=6"></script>
-  <script src="js/counting.js?v=6"></script>
-  <script src="js/movement.js?v=6"></script>
-  <script src="js/stats.js?v=6"></script>
-  <script src="js/app.js?v=6"></script>
+  <script src="js/sequences.js?v=7"></script>
+  <script src="js/rotation.js?v=7"></script>
+  <script src="js/figures.js?v=7"></script>
+  <script src="js/arrows.js?v=7"></script>
+  <script src="js/staticseries.js?v=7"></script>
+  <script src="js/counting.js?v=7"></script>
+  <script src="js/movement.js?v=7"></script>
+  <script src="js/cube.js?v=7"></script>
+  <script src="js/syllogism.js?v=7"></script>
+  <script src="js/cct.js?v=7"></script>
+  <script src="js/stats.js?v=7"></script>
+  <script src="js/app.js?v=7"></script>
 </body>
 </html>

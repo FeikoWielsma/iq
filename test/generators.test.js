@@ -11,6 +11,8 @@ require(path.join(__dirname, "..", "js", "arrows.js"));
 require(path.join(__dirname, "..", "js", "staticseries.js"));
 require(path.join(__dirname, "..", "js", "counting.js"));
 require(path.join(__dirname, "..", "js", "movement.js"));
+require(path.join(__dirname, "..", "js", "cube.js"));
+require(path.join(__dirname, "..", "js", "syllogism.js"));
 
 const gens = {
   numbers: window.Sequences.generateNumber,
@@ -24,11 +26,13 @@ const gens = {
   staticseries: window.StaticSeries.generate,
   counting: window.Counting.generate,
   movement: window.Movement.generate,
+  cube: window.Cube.generate,
+  syllogism: window.Syllogism.generate,
 };
 const expectedOptions = {
   numbers: 6, letters: 6, rotationSimple: 5, rotationCompound: 5,
   figures: 5, oddone: 5, analogy: 5, arrows: 5, staticseries: 4, counting: 5,
-  movement: 4,
+  movement: 4, cube: 4, syllogism: 4,
 };
 
 const ITERATIONS = 3000;

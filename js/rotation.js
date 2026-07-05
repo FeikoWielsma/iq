@@ -5,15 +5,28 @@
 
   const S = global.Sequences; // hergebruik helpers
 
-  // Teken de (chirale) figuur in een 64x64 tegel, geroteerd over `angle` graden,
-  // eventueel gespiegeld. De asymmetrische stip breekt alle symmetrie zodat
-  // rotatie en spiegeling altijd te onderscheiden zijn.
-  function glyphSVG(angle, mirrored) {
-    const inner =
-      '<circle cx="32" cy="21" r="9" fill="none" stroke="#111" stroke-width="2.5"/>' +
-      '<line x1="32" y1="30" x2="32" y2="50" stroke="#111" stroke-width="2.5"/>' +
-      '<line x1="23" y1="43" x2="41" y2="43" stroke="#111" stroke-width="2.5"/>' +
-      '<circle cx="39" cy="14" r="3.2" fill="#111"/>';
+  // Familie van chirale figuren (geen enkele heeft rotatie- of spiegelsymmetrie),
+  // zodat rotatie én spiegeling altijd te onderscheiden zijn.
+  const GLYPHS = [
+    // ring met steel, kruisbalk en stip
+    '<circle cx="32" cy="21" r="9" fill="none" stroke="#111" stroke-width="2.5"/>' +
+    '<line x1="32" y1="30" x2="32" y2="50" stroke="#111" stroke-width="2.5"/>' +
+    '<line x1="23" y1="43" x2="41" y2="43" stroke="#111" stroke-width="2.5"/>' +
+    '<circle cx="39" cy="14" r="3.2" fill="#111"/>',
+    // vlag aan een mast, met voetstip
+    '<line x1="30" y1="14" x2="30" y2="50" stroke="#111" stroke-width="2.5"/>' +
+    '<polygon points="30,14 48,20 30,27" fill="#111"/>' +
+    '<circle cx="24" cy="49" r="3" fill="#111"/>',
+    // pijl met opstaande poot en stip
+    '<line x1="18" y1="34" x2="45" y2="34" stroke="#111" stroke-width="2.5"/>' +
+    '<polyline points="38,27 47,34 38,41" fill="none" stroke="#111" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
+    '<line x1="18" y1="34" x2="18" y2="22" stroke="#111" stroke-width="2.5"/>' +
+    '<circle cx="26" cy="26" r="3" fill="#111"/>',
+  ];
+
+  // Teken figuur `gi` in een 64x64 tegel, geroteerd over `angle`, evt. gespiegeld.
+  function glyphSVG(angle, mirrored, gi) {
+    const inner = GLYPHS[gi || 0];
     const rot = '<g transform="rotate(' + angle + ' 32 32)">' + inner + "</g>";
     const body = mirrored
       ? '<g transform="translate(64,0) scale(-1,1)">' + rot + "</g>"
@@ -36,11 +49,12 @@
   function generateSimple() {
     const step = S.pick([45, 90, -45, -90]);
     const base = S.pick([0, 45, 90, 135, 180, 225, 270, 315]);
+    const gi = S.randInt(0, GLYPHS.length - 1); // willekeurige figuur uit de familie
 
     // 4 zichtbare standen + het vraagteken
     const prompt = [];
     for (let i = 0; i < 4; i++) {
-      prompt.push({ svg: glyphSVG(base + i * step, false) });
+      prompt.push({ svg: glyphSVG(base + i * step, false, gi) });
     }
     prompt.push({ mystery: true });
 
@@ -78,7 +92,7 @@
     }
 
     const all = S.shuffle(wrongs.concat([correct]));
-    const options = all.map((o) => ({ svg: glyphSVG(o.angle, o.mirrored) }));
+    const options = all.map((o) => ({ svg: glyphSVG(o.angle, o.mirrored, gi) }));
     const correctIndex = all.indexOf(correct);
 
     const dir = step > 0 ? "met de klok mee" : "tegen de klok in";

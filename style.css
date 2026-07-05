@@ -302,8 +302,84 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 .options-grid.small .option { min-height: 60px; padding: 8px; font-size: 1rem; }
 .options-grid.small .option svg { width: 44px; height: 44px; }
 
+/* --- Brede cel (kubus-uitslag) --- */
+.cell.wide { background: transparent; border: none; padding: 0; min-width: 0; min-height: 0; }
+.cell.wide svg { width: 150px; height: auto; }
+
+/* --- Premissen (syllogismen) --- */
+.premise {
+  flex-basis: 100%;
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--text);
+  padding: 4px 0;
+}
+
+/* --- Tekst-opties (syllogismen) --- */
+.options-grid.text-options { grid-template-columns: 1fr; }
+.text-options .option {
+  min-height: 0;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 12px 14px 12px 42px;
+}
+.text-options .option svg { width: 0; height: 0; }
+
+.menu-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.menu-buttons .ghost-btn { flex: 1; }
+
+/* --- Woord omgekeerd (CCT) --- */
+.cct-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.cct-cell {
+  width: 42px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background: var(--card-2);
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.cct-cell.blank { background: #23252a; border-style: dashed; }
+.cct-cell.active { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(88,101,242,.35); }
+.cct-cell.good { border-color: var(--good); color: var(--good); }
+.cct-cell.bad { border-color: var(--bad); color: var(--bad); }
+.cct-arrow { text-align: center; color: var(--muted); font-size: .85rem; }
+.cct-keyboard {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
+  max-width: 460px;
+  margin: 18px auto 0;
+}
+.key-btn {
+  padding: 10px 0;
+  background: var(--card-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.key-btn:hover { border-color: var(--accent); }
+
 @media (max-width: 520px) {
   .options-grid { grid-template-columns: repeat(2, 1fr); }
+  .options-grid.text-options { grid-template-columns: 1fr; }
   .cell { min-width: 52px; min-height: 52px; font-size: 1.3rem; }
   .bar-row { grid-template-columns: 120px 1fr 48px; }
+  .cct-keyboard { grid-template-columns: repeat(7, 1fr); }
+  .cct-cell { width: 34px; height: 42px; font-size: 1.2rem; }
 }

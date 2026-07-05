@@ -249,16 +249,19 @@
     },
   ];
 
-  function buildLetterOptions(correctN) {
+  // candidateNs = op regels gebaseerde foute antwoorden (fout stapje, één te
+  // ver/kort); aangevuld met nabije offsets tot er 5 zijn.
+  function buildLetterOptions(correctN, candidateNs) {
+    const correct = toLetter(correctN);
     const wrongs = new Set();
+    (candidateNs || []).forEach((n) => { const L = toLetter(n); if (L !== correct) wrongs.add(L); });
     const offsets = shuffle([1, 2, 3, -1, -2, -3, 4, -4]);
     let oi = 0;
     while (wrongs.size < 5) {
       const v = correctN + offsets[oi++ % offsets.length] + (oi > 8 ? randInt(-6, 6) : 0);
       const L = toLetter(v);
-      if (L !== toLetter(correctN)) wrongs.add(L);
+      if (L !== correct) wrongs.add(L);
     }
-    const correct = toLetter(correctN);
     const opts = shuffle(Array.from(wrongs).slice(0, 5).concat([correct]));
     return {
       options: opts.map((L) => ({ text: L })),
@@ -272,9 +275,14 @@
     const pool = LET_DIFF[difficulty] || LET_DIFF[2];
     const ruleFn = letterRules[pick(pool)];
     const rule = ruleFn();
-    const prompt = rule.seq.slice(0, 5).map((n) => ({ text: toLetter(n) }));
+    const seq = rule.seq;
+    const prompt = seq.slice(0, 5).map((n) => ({ text: toLetter(n) }));
     prompt.push({ mystery: true });
-    const built = buildLetterOptions(rule.correctN);
+    // plausibele foute antwoorden op basis van de reeks: laatste stap doorzetten,
+    // één te ver / te kort, of de vorige letter herhalen
+    const lastStep = seq[4] - seq[3];
+    const candidates = [seq[4] + lastStep, rule.correctN + 1, rule.correctN - 1, seq[4]];
+    const built = buildLetterOptions(rule.correctN, candidates);
     return {
       type: "letters",
       ruleTag: "letters:" + ruleFn.name,
