@@ -78,11 +78,28 @@ Zie [plan.md](plan.md) voor de details per fase. Eén taak ≈ één commit.
 - [x] Score per item + opslaan in stats (`type: cct`)
 - [x] Eigen menu-ingang (niet in de gewone MCQ-mix)
 
-## Fase 6 — Polish (grotendeels done)
+## Fase 6 — Polish (done)
 
 - [x] Rotatie: glyph-familie (3 asymmetrische figuren)
 - [x] Rotatie difficulty 3: samengestelde rotatie (ring + streep)
 - [x] Letterreeks-afleiders op basis van foute regels i.p.v. ±offset
 - [x] Responsive CSS (menu, opties, toetsenbord) tot smalle schermen
 - [x] Favicon (inline SVG) + README.md
-- [ ] Visuele uitleg bij figuurvragen (veranderend attribuut uitgelicht) — open
+- [x] Visuele uitleg bij figuurvragen: volledige reeks incl. antwoord onder de
+      feedback (`solution` op de generator, gerenderd door `renderSolution` in
+      `app.js`); toegepast op figurenreeks, pijlen, matrix en fused
+
+## Fase 8 — Kleur + nieuwe visuele types (done)
+
+Op basis van de research-screenshots (assess.ly figuurreeksen / abstracte
+matrices), die kleur en 3×3-rasters tonen.
+
+- [x] Kleur als attribuut in de figuur-engine (`figures.js`): palet, kleur-regel
+      (vast herhalend patroon), kleur-afleiders, kleur-transformatie in
+      analogieën, kleur-discriminator in uitzondering-zoeken
+- [x] Abstracte matrices (`matrix.js`): 3×3-raster met rotatie / verplaatsing /
+      aantal, 6 opties, volledige-raster-uitleg
+- [x] Draaien & tellen (`fused.js`): één object met twee gelijktijdige regels
+      (pijl draait + streepje erbij), kleurwissel op niveau 3
+- [x] Beide nieuwe categorieën in menu + mixed + stress-test (matrix 6 opties,
+      fused 5 opties)

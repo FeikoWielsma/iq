@@ -12,6 +12,8 @@
     { id: "counting", name: "Aantallen tellen", gen: (d) => Counting.generate(d) },
     { id: "movement", name: "Verplaatsing", gen: (d) => Movement.generate(d) },
     { id: "rotation", name: "Figuren roteren", gen: (d) => Rotation.generate(d) },
+    { id: "matrix", name: "Abstracte matrices", gen: (d) => Matrix.generate(d) },
+    { id: "fused", name: "Draaien & tellen", gen: (d) => Fused.generate(d) },
     { id: "oddone", name: "Uitzondering zoeken", gen: (d) => Figures.generateOddOneOut(d) },
     { id: "analogy", name: "Analogieën", gen: (d) => Figures.generateAnalogy(d) },
     { id: "cube", name: "Kubus vouwen", gen: (d) => Cube.generate(d) },
@@ -233,9 +235,35 @@
     $("feedback-headline").textContent = text;
     $("feedback-headline").className = "feedback-headline " + (good ? "good" : "bad");
     $("feedback-explanation").textContent = explanation;
+    renderSolution(practice.question);
     $("feedback").classList.remove("hidden");
     $("q-score").textContent = String(practice.score);
     $("q-streak").textContent = String(practice.streak);
+  }
+
+  // Visuele uitleg: sommige generatoren leveren een `solution` met de volledige
+  // reeks (incl. het antwoord). Die tonen we onder de tekstuele uitleg.
+  function renderSolution(q) {
+    const host = $("feedback-solution");
+    host.innerHTML = "";
+    if (!q || !q.solution || !q.solution.cells) { host.classList.add("hidden"); return; }
+    host.classList.remove("hidden");
+    if (q.solution.note) {
+      const n = document.createElement("div");
+      n.className = "solution-note";
+      n.textContent = q.solution.note;
+      host.appendChild(n);
+    }
+    const row = document.createElement("div");
+    row.className = "prompt-row small solution-row";
+    q.solution.cells.forEach((c) => {
+      const div = document.createElement("div");
+      div.className = "cell" + (c.answer ? " answer" : "") + (c.wide ? " wide" : "");
+      if (c.svg) div.innerHTML = c.svg;
+      else div.textContent = c.text || "";
+      row.appendChild(div);
+    });
+    host.appendChild(row);
   }
 
   function backToMenu() {

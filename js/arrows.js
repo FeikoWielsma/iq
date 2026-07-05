@@ -129,6 +129,10 @@
       options: built.options,
       correctIndex: built.correctIndex,
       explanation: "Regel: " + ruleTexts.join(" én ") + ".",
+      solution: {
+        note: "De volledige reeks — het laatste vak is het antwoord:",
+        cells: figs.map((f, i) => ({ svg: arrowSVG(f), answer: i === 4 })),
+      },
     };
   }
 

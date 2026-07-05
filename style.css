@@ -204,6 +204,17 @@ kbd {
 .feedback-headline.good { color: var(--good); }
 .feedback-headline.bad { color: var(--bad); }
 .feedback-explanation { color: var(--muted); margin-bottom: 16px; }
+
+/* Visuele uitleg (volledige reeks) onder de tekstuitleg */
+.feedback-solution { margin: 4px 0 18px; }
+.solution-note { color: var(--muted); font-size: .85rem; margin-bottom: 6px; }
+.solution-row { margin: 6px 0 0; }
+.solution-row .cell.answer {
+  border-color: var(--good);
+  box-shadow: 0 0 0 2px rgba(35, 165, 90, .45);
+}
+#feedback-solution .cell.wide { background: transparent; border: none; padding: 0; min-width: 0; min-height: 0; }
+#feedback-solution .cell.wide svg { width: 172px; height: auto; }
 .primary-btn {
   background: var(--accent);
   border: none;

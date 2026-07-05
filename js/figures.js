@@ -18,6 +18,23 @@
     3: "driehoek", 4: "vierkant", 5: "vijfhoek", 6: "zeshoek", 7: "zevenhoek",
   };
 
+  // Kleur als attribuut. Grijs is de "neutrale" vulling (zoals voorheen); de
+  // levendige kleuren worden alleen door de kleur-regel / kleur-transformaties
+  // gebruikt, zodat gewone vragen monochroom blijven.
+  const GREY = "#8e96a4";
+  const PALETTE = [
+    { hex: "#e0384d", name: "rood" },
+    { hex: "#3b82c4", name: "blauw" },
+    { hex: "#3f9e54", name: "groen" },
+    { hex: "#d9a441", name: "geel" },
+    { hex: "#9061c2", name: "paars" },
+  ];
+  const COLOR_SEQ = PALETTE.map((p) => p.hex);
+  function colorName(hex) {
+    const p = PALETTE.find((x) => x.hex === hex);
+    return p ? p.name : "grijs";
+  }
+
   /* ---------- rendering ---------- */
 
   // Genormaliseerde stipposities (−1..1), geschaald naar de ingeschreven cirkel
@@ -46,8 +63,9 @@
   function figureSVG(fig) {
     const cx = 32, cy = 32;
     const r = 26 * fig.size;
-    // duidelijk zichtbaar grijs vs wit; zwarte stippen/rand blijven leesbaar
-    const shapeFill = fig.fill ? "#8e96a4" : "#fff";
+    // duidelijk zichtbaar gevuld vs wit; zwarte stippen/rand blijven leesbaar.
+    // Gevulde figuren gebruiken hun kleur (grijs als er geen is toegekend).
+    const shapeFill = fig.fill ? (fig.color || GREY) : "#fff";
     // Stippen binnen de ingeschreven cirkel (straal = r·cos(π/n), gecentreerd op
     // het middelpunt). Zo passen ze altijd netjes — driehoeken krijgen vanzelf
     // een kleiner veld en er is geen overlap met de randen meer.
@@ -68,10 +86,14 @@
   }
 
   function keyOf(fig) {
-    return [fig.sides, fig.dots, fig.size, fig.fill ? 1 : 0].join("|");
+    // Kleur telt alleen mee als de figuur gevuld is: twee open (witte) figuren
+    // met verschillende kleurvelden zien er identiek uit en mogen niet als
+    // aparte opties gelden.
+    const paint = fig.fill ? "c" + (fig.color || GREY) : "open";
+    return [fig.sides, fig.dots, fig.size, paint].join("|");
   }
   function clone(fig) {
-    return { sides: fig.sides, dots: fig.dots, size: fig.size, fill: fig.fill };
+    return { sides: fig.sides, dots: fig.dots, size: fig.size, fill: fig.fill, color: fig.color };
   }
 
   function randomFigure() {
@@ -80,6 +102,7 @@
       dots: S.randInt(0, DOTS_MAX),
       size: S.pick([0.8, 0.9, 1.0]),
       fill: Math.random() < 0.3,
+      color: GREY,
     };
   }
 
@@ -99,6 +122,12 @@
     f = clone(fig); f.sides += 1; push(f);
     f = clone(fig); f.sides -= 1; push(f);
     f = clone(fig); f.fill = !f.fill; push(f);
+    // kleur-afleider: zelfde figuur, andere kleur (alleen zinvol bij vulling)
+    if (fig.fill) {
+      f = clone(fig);
+      f.color = S.pick(COLOR_SEQ.filter((c) => c !== (fig.color || GREY)));
+      push(f);
+    }
     f = clone(fig); f.dots += 2; push(f);
     f = clone(fig); f.sides -= 2; push(f);
     f = clone(fig); f.sides += 1; f.dots -= 1; push(f);
@@ -181,21 +210,35 @@
         text: up ? "de figuur wordt elke stap groter" : "de figuur wordt elke stap kleiner",
       };
     },
+    function colorCycle() {
+      // vast, herhalend kleurpatroon (periode 2 of 3) — af te leiden uit de 4
+      // getoonde figuren. De figuur is altijd gevuld zodat de kleur zichtbaar is.
+      const k = S.pick([2, 3]);
+      const cyc = S.shuffle(COLOR_SEQ.slice()).slice(0, k);
+      return {
+        tag: "color", // voor analytics; deelt wél het "fill"-slot voor conflictvermijding
+        apply: (fig, i) => { fig.fill = true; fig.color = cyc[i % k]; },
+        text: "de kleur volgt een vast patroon (" + cyc.map(colorName).join(" → ") +
+          ", en dan weer van voren af aan)",
+      };
+    },
   ];
 
   // Kies conflictvrije regels: per attribuut maximaal één regel
-  // (anders zou bijv. dotsUp + dotsDown elkaar overschrijven).
-  const RULE_ATTR = ["dots", "dots", "sides", "sides", "fill", "size"];
+  // (anders zou bijv. dotsUp + dotsDown elkaar overschrijven). colorCycle deelt
+  // het "fill"-attribuut zodat het niet samen met fillAlternate wordt gekozen.
+  const RULE_ATTR = ["dots", "dots", "sides", "sides", "fill", "size", "fill"];
   function pickRules(count) {
-    const idxs = S.shuffle([0, 1, 2, 3, 4, 5]);
+    const idxs = S.shuffle([0, 1, 2, 3, 4, 5, 6]);
     const used = new Set();
     const rules = [];
     const attrs = [];
     for (const i of idxs) {
       if (used.has(RULE_ATTR[i])) continue;
       used.add(RULE_ATTR[i]);
-      rules.push(seriesRules[i]());
-      attrs.push(RULE_ATTR[i]);
+      const rule = seriesRules[i]();
+      rules.push(rule);
+      attrs.push(rule.tag || RULE_ATTR[i]); // analytics-label mag afwijken van het conflict-slot
       if (rules.length >= count) break;
     }
     return { rules, attrs };
@@ -227,6 +270,11 @@
       options: built.options,
       correctIndex: built.correctIndex,
       explanation: "Regel: " + rules.map((r) => r.text).join(" én ") + ".",
+      // Visuele uitleg: de volledige reeks incl. het antwoord, laatste uitgelicht.
+      solution: {
+        note: "De volledige reeks — het laatste vak is het antwoord:",
+        cells: figs.map((f, i) => ({ svg: figureSVG(f), answer: i === 4 })),
+      },
     };
   }
 
@@ -236,11 +284,14 @@
     // Discriminator: één attribuut waarin 4 figuren gelijk zijn en 1 afwijkt.
     // Eén "ruis"-attribuut krijgt 5 verschillende waarden (dan is anders-zijn
     // dáárin geen kenmerk); de overige attributen zijn overal gelijk.
-    const disc = S.pick(["dots", "sides", "fill", "size"]);
-    const noiseChoices = { dots: ["sides"], sides: ["dots"], fill: ["sides", "dots"], size: ["sides", "dots"] };
+    const disc = S.pick(["dots", "sides", "fill", "size", "color"]);
+    const noiseChoices = {
+      dots: ["sides"], sides: ["dots"], fill: ["sides", "dots"],
+      size: ["sides", "dots"], color: ["sides", "dots"],
+    };
     const noise = S.pick(noiseChoices[disc]);
 
-    const base = { sides: 5, dots: 3, size: 0.9, fill: false };
+    const base = { sides: 5, dots: 3, size: 0.9, fill: false, color: GREY };
 
     // waarden voor de discriminator: gedeelde waarde + afwijkende waarde
     let shared, odd, discText;
@@ -260,10 +311,16 @@
       odd = !shared;
       discText = "vier figuren zijn " + (shared ? "grijs gevuld" : "wit") +
         ", één is " + (odd ? "grijs gevuld" : "wit");
-    } else {
+    } else if (disc === "size") {
       shared = 0.9;
       odd = 0.6;
       discText = "vier figuren zijn even groot, één is duidelijk kleiner";
+    } else { // color
+      base.fill = true;
+      const two = S.shuffle(COLOR_SEQ.slice()).slice(0, 2);
+      shared = two[0];
+      odd = two[1];
+      discText = "vier figuren zijn " + colorName(shared) + ", één is " + colorName(odd);
     }
 
     // ruiswaarden: 5 verschillende
@@ -333,6 +390,14 @@
       apply: (f) => { f.size = 0.6; },
       text: "de figuur wordt klein",
     },
+    // Kleur-transformaties: elk een vaste doelkleur, zodat A→B en C→D exact
+    // dezelfde verandering ondergaan (dat maakt de analogie kloppend).
+    ...PALETTE.slice(0, 3).map((p) => ({
+      id: "color:" + p.name,
+      can: (f) => !f.fill || (f.color || GREY) !== p.hex,
+      apply: (f) => { f.fill = true; f.color = p.hex; },
+      text: "de figuur wordt " + p.name + " gevuld",
+    })),
   ];
 
   function generateAnalogy(difficulty) {
