@@ -103,3 +103,6 @@ matrices), die kleur en 3×3-rasters tonen.
       (pijl draait + streepje erbij), kleurwissel op niveau 3
 - [x] Beide nieuwe categorieën in menu + mixed + stress-test (matrix 6 opties,
       fused 5 opties)
+- [x] Weegschaal (`balance.js`): balk op steunpunt, tikt naar de zwaarste kant;
+      aantal gewichtjes verandert per stap; afleiders met verkeerde kant/aantal;
+      volledige-reeks-uitleg; in menu + mixed + stress-test (5 opties)

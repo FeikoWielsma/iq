@@ -14,6 +14,7 @@
     { id: "rotation", name: "Figuren roteren", gen: (d) => Rotation.generate(d) },
     { id: "matrix", name: "Abstracte matrices", gen: (d) => Matrix.generate(d) },
     { id: "fused", name: "Draaien & tellen", gen: (d) => Fused.generate(d) },
+    { id: "balance", name: "Weegschaal", gen: (d) => Balance.generate(d) },
     { id: "oddone", name: "Uitzondering zoeken", gen: (d) => Figures.generateOddOneOut(d) },
     { id: "analogy", name: "Analogieën", gen: (d) => Figures.generateAnalogy(d) },
     { id: "cube", name: "Kubus vouwen", gen: (d) => Cube.generate(d) },

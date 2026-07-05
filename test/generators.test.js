@@ -13,6 +13,7 @@ require(path.join(__dirname, "..", "js", "counting.js"));
 require(path.join(__dirname, "..", "js", "movement.js"));
 require(path.join(__dirname, "..", "js", "matrix.js"));
 require(path.join(__dirname, "..", "js", "fused.js"));
+require(path.join(__dirname, "..", "js", "balance.js"));
 require(path.join(__dirname, "..", "js", "cube.js"));
 require(path.join(__dirname, "..", "js", "syllogism.js"));
 
@@ -30,13 +31,14 @@ const gens = {
   movement: window.Movement.generate,
   matrix: window.Matrix.generate,
   fused: window.Fused.generate,
+  balance: window.Balance.generate,
   cube: window.Cube.generate,
   syllogism: window.Syllogism.generate,
 };
 const expectedOptions = {
   numbers: 6, letters: 6, rotationSimple: 5, rotationCompound: 5,
   figures: 5, oddone: 5, analogy: 5, arrows: 5, staticseries: 4, counting: 5,
-  movement: 4, matrix: 6, fused: 5, cube: 4, syllogism: 4,
+  movement: 4, matrix: 6, fused: 5, balance: 5, cube: 4, syllogism: 4,
 };
 
 const ITERATIONS = 3000;
