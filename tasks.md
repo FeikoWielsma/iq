@@ -103,6 +103,20 @@ matrices), die kleur en 3×3-rasters tonen.
       (pijl draait + streepje erbij), kleurwissel op niveau 3
 - [x] Beide nieuwe categorieën in menu + mixed + stress-test (matrix 6 opties,
       fused 5 opties)
-- [x] Weegschaal (`balance.js`): balk op steunpunt, tikt naar de zwaarste kant;
-      aantal gewichtjes verandert per stap; afleiders met verkeerde kant/aantal;
-      volledige-reeks-uitleg; in menu + mixed + stress-test (5 opties)
+- [x] ~~Weegschaal (`balance.js`)~~ — teruggedraaid. Was gebaseerd op een
+      verkeerde lezing van figuurreeksen/example7 (dat is een *figuurreeks* met
+      een schuine balk als element, geen weeglogica). Bovendien niet uniek
+      bepaald: bij vaste kanteling zijn meerdere opties (juiste kant, ander
+      aantal) fysisch geldig. Verwijderd — geen assess.ly-categorie.
+- [x] Gekleurde composities (`scene.js`) — de getrouwe lezing van example7:
+      een vak met draaiende scheidslijn, een grote ster die van kleur wisselt
+      en een rij kleine gekleurde vijfhoeken waarvan het aantal verandert.
+      Elke afleider is één attribuut één stap fout, dus het antwoord is uniek
+      bepaald. In menu + mixed + stress-test (5 opties).
+
+## Kubus vouwen — 3D-inhoud + weergavemodi (done)
+
+- [x] Inhoud met affiene transform op de zichtbare vlakken (echt 3D); + en x
+      vervangen door zes duidelijke gevulde vormen
+- [x] Weergavemodi: symbolen, gekleurde vlakken, halve vlakken, getallen
+- [x] Vouwlogica ongewijzigd; audit: precies één vouwbare optie in alle modi
